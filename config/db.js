@@ -1,21 +1,23 @@
-const mongoose = require('mongoose')
-const { MongoClient } = require('mongodb');
-
 const dotenv = require('dotenv');
+
+const mongoose = require('mongoose');
 
 dotenv.config()
 
-const connectDB = async() => {
-
-    const uri = process.env.MONGO_URL
-    const client = await new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-    // const conn = await mongoose.connect('mongodb+srv://Gabkings:rread@123@bootcampsapp.yawx2.mongodb.net/DevCamper?retryWrites=true&w=majority', {
-    //     useNewUrlParser: true,
-    //     useCreateIndex: true,
-    //     useFindAndModify: false,
-    //     useUnifiedTopology: true
-    // });
-    console.log(`Database Connected  hosted by ${client.db().databaseName}`)
+const url = process.env.MONGO_URL;
+async function connectDB() {
+    await mongoose
+        .connect(url, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true
+        })
+        .then(() => {
+            console.log("Connected to the database!");
+        })
+        .catch(err => {
+            console.log("Cannot connect to the database!", err);
+            process.exit();
+        })
 }
 
 module.exports = connectDB;
